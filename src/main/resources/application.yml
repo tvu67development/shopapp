@@ -1,0 +1,31 @@
+server:
+  port: 8088
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/shopapp?useSSL=false&serverTimezone=UTC  # URL của cơ sở dữ liệu
+    username: root                        # Tên đăng nhập vào cơ sở dữ liệu
+    password:                         # Mật khẩu đăng nhập vào cơ sở dữ liệu
+    driver-class-name: com.mysql.cj.jdbc.Driver    # Tên lớp driver của MySQL (tùy thuộc vào cơ sở dữ liệu bạn sử dụng)
+#    initialization-mode: always                    # Chế độ khởi tạo cơ sở dữ liệu (always để tự động chạy các tệp schema.sql và data.sql)
+#    hikari:
+#      maximum-pool-size: 10                        # Số lượng kết nối tối đa trong pool
+#      idle-timeout: 30000                          # Thời gian tối đa cho phép kết nối ở trạng thái không hoạt động (miligiay)
+  jpa:
+    hibernate:
+      ddl-auto: none  # Tự động tạo bảng nếu chưa tồn tại
+    show-sql: true  # Hiển thị các câu lệnh SQL được tạo ra trong log
+
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.MySQL8Dialect  # Dialect cho MySQL
+      format_sql: true  # Định dạng các câu lệnh SQL hiển thị trong log
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+api:
+  prefix: api/v1
+jwt:
+  expiration: 2592000 # 30 days
+  secretKey: "rDJmnZfA8XFp/hftdVJq5ZSnjGQhpak/NEKzF2JwaUQ="
+
