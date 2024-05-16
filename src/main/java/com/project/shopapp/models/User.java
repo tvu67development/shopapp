@@ -43,7 +43,7 @@ public class User extends BaseEntity implements UserDetails {
     private boolean isActive;
 
     @Column(name = "date_of_birth")
-    private Date datOfBirth;
+    private Date dateOfBirth;
 
     @Column(name = "facebook_account_id")
     private int facebookAccountId;
@@ -57,9 +57,10 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.getRole().getName()));
-        return authorities;
+        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+        authorityList.add(new SimpleGrantedAuthority("ROLE_" + this.getRole().getName().toUpperCase()));
+//        authorityList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        return authorityList;
     }
 
     @Override

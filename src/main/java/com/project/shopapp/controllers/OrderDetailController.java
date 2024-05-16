@@ -1,8 +1,10 @@
 package com.project.shopapp.controllers;
 
+import com.project.shopapp.components.LocalizationUtils;
 import com.project.shopapp.dtos.OrderDetailDTO;
 import com.project.shopapp.responses.OrderDetailResponse;
 import com.project.shopapp.services.IOrderDetailService;
+import com.project.shopapp.utils.MessageKeys;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import java.util.List;
 public class OrderDetailController {
 
     private final IOrderDetailService iOrderDetailService;
+    private final LocalizationUtils localizationUtils;
 
     @PostMapping
     public ResponseEntity<?> createOrderDetail(
@@ -60,12 +63,11 @@ public class OrderDetailController {
     }
 
     @PutMapping("/{order_detail_id}")
-    public ResponseEntity<String> updateOrderDetail(@Valid @PathVariable("order_detail_id") Long orderDetailId,
+    public ResponseEntity<?> updateOrderDetail(@Valid @PathVariable("order_detail_id") Long orderDetailId,
                                               @Valid @RequestBody OrderDetailDTO orderDetailDTO) {
         try {
-            iOrderDetailService.updateOrderDetail(orderDetailId,orderDetailDTO);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    String.format("Updated Order Detail with id %d", orderDetailId));
+            OrderDetailResponse orderDetailResponse = iOrderDetailService.updateOrderDetail(orderDetailId,orderDetailDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(orderDetailResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -75,7 +77,9 @@ public class OrderDetailController {
     public ResponseEntity<String> deleteOrderDetail(@Valid @PathVariable("order_detail_id") Long orderDetailId) {
         try {
             iOrderDetailService.deleteOrderDetail(orderDetailId);
-            return ResponseEntity.status(HttpStatus.OK).body("Deleted Order Detail with id "+orderDetailId);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    localizationUtils.getLocalizeMessage(MessageKeys.DELETE_ORDER_DETAIL_SUCCESSFULLY, orderDetailId)
+            );
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

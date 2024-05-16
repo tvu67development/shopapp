@@ -1,11 +1,14 @@
 package com.project.shopapp.controllers;
 
+import com.project.shopapp.components.LocalizationUtils;
 import com.project.shopapp.dtos.OrderDTO;
 import com.project.shopapp.models.Order;
 import com.project.shopapp.responses.OrderResponse;
 import com.project.shopapp.services.IOrderService;
+import com.project.shopapp.utils.MessageKeys;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,6 +23,7 @@ import java.util.List;
 public class OrderController {
 
     private final IOrderService iOrderService;
+    private final LocalizationUtils localizationUtils;
 
     @PostMapping
     public ResponseEntity<?> createOrder(
@@ -61,11 +65,11 @@ public class OrderController {
     }
 
     @PutMapping("/{order_id}")
-    public ResponseEntity<String> updateOrder(@Valid @PathVariable("order_id") Long orderId,
+    public ResponseEntity<?> updateOrder(@Valid @PathVariable("order_id") Long orderId,
                                               @Valid @RequestBody OrderDTO orderDTO) {
         try {
-            iOrderService.updateOrder(orderId, orderDTO);
-            return ResponseEntity.status(HttpStatus.OK).body("Updated Order with id "+orderId);
+            OrderResponse orderResponse = iOrderService.updateOrder(orderId, orderDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(orderResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -75,7 +79,8 @@ public class OrderController {
     public ResponseEntity<String> deleteOrder(@Valid @PathVariable("order_id") Long orderId) {
         try {
             iOrderService.deleteOrder(orderId);
-            return ResponseEntity.status(HttpStatus.OK).body(String.format("Deleted Order with id %d", orderId));
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    localizationUtils.getLocalizeMessage(MessageKeys.DELETE_ORDER_SUCCESSFULLY, orderId));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

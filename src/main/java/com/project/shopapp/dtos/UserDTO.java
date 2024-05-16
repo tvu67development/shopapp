@@ -28,11 +28,11 @@ public class UserDTO {
     @NotNull(message = "Password not blank")
     private String password;
 
-    @JsonProperty("re_password")
+    @JsonProperty("retype_password")
     private String retypePassword;
 
-    @JsonProperty("day_of_birth")
-    private Date dayOfBirth;
+    @JsonProperty("date_of_birth")
+    private Date dateOfBirth;
 
     @JsonProperty("facebook_account_id")
     private int facebookAccountId;

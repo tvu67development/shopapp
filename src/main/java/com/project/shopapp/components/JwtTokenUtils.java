@@ -1,7 +1,6 @@
 package com.project.shopapp.components;
 
 import com.project.shopapp.exceptions.InvalidParamException;
-import com.project.shopapp.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,11 +19,11 @@ import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
-public class JwtTokenUtil {
+public class JwtTokenUtils {
     @Value("${jwt.expiration}")
-    private final int expiration; //save to an environment variable
+    private int expiration; //save to an environment variable
     @Value("${jwt.secretKey}")
-    private final String secretKey;
+    private String secretKey;
     public String generateToken(com.project.shopapp.models.User user) throws Exception{
         //properties => claims
         Map<String, Object> claims = new HashMap<>();

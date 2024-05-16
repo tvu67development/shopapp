@@ -1,6 +1,7 @@
 package com.project.shopapp.controllers;
 
 import com.github.javafaker.Faker;
+import com.project.shopapp.components.LocalizationUtils;
 import com.project.shopapp.dtos.ProductDTO;
 import com.project.shopapp.dtos.ProductImageDTO;
 import com.project.shopapp.exceptions.ExceededParamException;
@@ -9,6 +10,7 @@ import com.project.shopapp.models.ProductImage;
 import com.project.shopapp.responses.ProductListResponse;
 import com.project.shopapp.responses.ProductResponse;
 import com.project.shopapp.services.IProductService;
+import com.project.shopapp.utils.MessageKeys;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.util.StringUtil;
@@ -39,6 +41,7 @@ import java.util.UUID;
 public class ProductController {
 
     private final IProductService iProductService;
+    private final LocalizationUtils localizationUtils;
 
     @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO productDTO,
@@ -68,16 +71,20 @@ public class ProductController {
             if (files.isEmpty())
                 files = new ArrayList<>();
             else if (files.size() > ProductImage.MAX_IMAGES_PER_PRODUCT)
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not upload exceeded "
-                        + ProductImage.MAX_IMAGES_PER_PRODUCT + " images");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(localizationUtils
+                        .getLocalizeMessage(MessageKeys.UPLOAD_IMAGES_MAX, ProductImage.MAX_IMAGES_PER_PRODUCT));
             for(MultipartFile file : files) {
                 if (file.getSize() == 0) continue;
                 if (file.getSize() > 10*1024*1024) {
-                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("File must be less than 10MB");
+                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(
+                            localizationUtils.getLocalizeMessage(MessageKeys.UPLOAD_IMAGES_FILE_LARGE)
+                    );
                 }
                 String contentType = file.getContentType();
                 if (contentType == null || !contentType.startsWith("image/")) {
-                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be Image");
+                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(
+                            localizationUtils.getLocalizeMessage(MessageKeys.UPLOAD_IMAGES_FILE_MUST_BE_IMAGE)
+                    );
                 }
                 String fileName = storeFile(file);
                 ProductImageDTO newProductImageDTO = ProductImageDTO.builder()
