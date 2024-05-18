@@ -73,7 +73,8 @@ public class UserController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody UserLoginDTO userLoginDTO,
                                                BindingResult result) {
         try {
-            String token = iUserService.login(userLoginDTO.getPhoneNumber(), userLoginDTO.getPassword());
+            String token = iUserService.login(
+                    userLoginDTO.getPhoneNumber(), userLoginDTO.getPassword(), userLoginDTO.getRoleId());
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     LoginResponse.builder()

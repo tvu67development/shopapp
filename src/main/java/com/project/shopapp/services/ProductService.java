@@ -89,7 +89,7 @@ public class ProductService implements IProductService {
                     .imageUrl(productImageDTO.getImageUrl())
                     .build();
             List<ProductImage> productImages = productImageRepository.findByProductId(productImageDTO.getProductId());
-            if (productImages.size() > ProductImage.MAX_IMAGES_PER_PRODUCT) {
+            if (productImages.size() >= ProductImage.MAX_IMAGES_PER_PRODUCT) {
                 throw new ExceededParamException("Exceeded number of Images per Product ("
                         + ProductImage.MAX_IMAGES_PER_PRODUCT + ")");
             }

@@ -14,6 +14,7 @@ import com.project.shopapp.utils.MessageKeys;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.util.StringUtil;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -100,6 +101,24 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/images/{image_name}")
+    public ResponseEntity<?> viewImage(@PathVariable("image_name") String imageName) {
+        try {
+            Path imagePath = Paths.get("uploads/"+imageName);
+            UrlResource resource = new UrlResource(imagePath.toUri());
+
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     public String storeFile(MultipartFile file) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename() == null ? "" : file.getOriginalFilename());
         String uniqueFileName = UUID.randomUUID() + "_" + fileName;
@@ -119,7 +138,9 @@ public class ProductController {
     ) {
         PageRequest pageRequest = PageRequest.of(
                 page - 1, limit, // tru 1 vi page bat dau tinh tu 0
-                Sort.by("createdAt").descending());
+//                Sort.by("createdAt").descending()
+                Sort.by("id").ascending()
+        );
         Page<ProductResponse> productResponsePages = iProductService.getAllProducts(pageRequest);
         int totalPages = productResponsePages.getTotalPages();  // = xai may cong thuc tinh toan
         List<ProductResponse> productResponses = productResponsePages.getContent(); // tra ve list Product cua Product Page
