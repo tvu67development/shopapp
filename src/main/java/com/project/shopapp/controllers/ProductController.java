@@ -112,7 +112,9 @@ public class ProductController {
                         .contentType(MediaType.IMAGE_JPEG)
                         .body(resource);
             } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(new UrlResource(Paths.get("uploads/not_found.jpg").toUri()));
             }
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -133,15 +135,17 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<ProductListResponse> getAllProducts(
-            @RequestParam int page,
-            @RequestParam int limit
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "0", name = "category_id") Long categoryId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit
     ) {
         PageRequest pageRequest = PageRequest.of(
                 page - 1, limit, // tru 1 vi page bat dau tinh tu 0
 //                Sort.by("createdAt").descending()
                 Sort.by("id").ascending()
         );
-        Page<ProductResponse> productResponsePages = iProductService.getAllProducts(pageRequest);
+        Page<ProductResponse> productResponsePages = iProductService.getAllProducts(keyword, categoryId,pageRequest);
         int totalPages = productResponsePages.getTotalPages();  // = xai may cong thuc tinh toan
         List<ProductResponse> productResponses = productResponsePages.getContent(); // tra ve list Product cua Product Page
         // page bat dau tu 0
@@ -156,7 +160,7 @@ public class ProductController {
     public ResponseEntity<?> getProductById(@PathVariable("product_id") Long id) {
         try {
             Product existingProduct = iProductService.getProductById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(ProductResponse.fromProduct(existingProduct));
+            return ResponseEntity.ok(ProductResponse.fromProduct(existingProduct));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

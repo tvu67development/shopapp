@@ -1,5 +1,7 @@
 package com.project.shopapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,8 +23,10 @@ public class ProductImage {
 
     @JoinColumn(name = "product_id")
     @ManyToOne  // moi mot ProductImage ung voi mot Product
+    @JsonIgnore
     private Product product;
 
     @Column(name = "image_url", length = 300)
+    @JsonProperty("image_url")
     private String imageUrl;
 }

@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 //@EqualsAndHashCode(callSuper = true) -- test thứ tự trả về của Response trong Postman
 @Entity // thuc the trong JavaSpring
@@ -36,5 +37,8 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "category_id")  // ten column co vai tro FOREIGN KEY trong bang
     @ManyToOne // Many thuoc ve Product Entity - One thuoc ve Category -> moi mot product phai thuoc ve 1 Category
     private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProductImage> productImages;
 
 }

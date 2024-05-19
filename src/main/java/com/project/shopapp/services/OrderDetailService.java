@@ -12,6 +12,7 @@ import com.project.shopapp.responses.OrderDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class OrderDetailService implements IOrderDetailService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public OrderDetailResponse createOrderDetail(OrderDetailDTO orderDetailDTO) throws Exception {
         Order existingOrder = orderRepository.findById(orderDetailDTO.getOrderId()).orElseThrow(
                 () -> new DataNotFoundException("Not found Order with id "+orderDetailDTO.getOrderId())
@@ -58,6 +60,7 @@ public class OrderDetailService implements IOrderDetailService {
     }
 
     @Override
+    @Transactional
     public OrderDetailResponse updateOrderDetail(Long id, OrderDetailDTO orderDetailDTO) throws Exception {
         OrderDetail orderDetail = orderDetailRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Not found Order Detail with id "+id)
@@ -81,6 +84,7 @@ public class OrderDetailService implements IOrderDetailService {
     }
 
     @Override
+    @Transactional
     public void deleteOrderDetail(Long id) throws Exception {
         OrderDetail orderDetail = orderDetailRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Not found Order Detail with id "+id)
