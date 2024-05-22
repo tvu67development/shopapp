@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 //@Service  -- phai dat trong class Service, ko de trong interface
 public interface IProductService {
 
@@ -26,4 +28,6 @@ public interface IProductService {
     boolean existsByName(String name);
 
     public ProductImage createProductImage(ProductImageDTO productImageDTO) throws Exception;
+
+    public List<Product> findProductsByIds(List<Long> productIds);
 }

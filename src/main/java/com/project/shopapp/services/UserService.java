@@ -51,6 +51,7 @@ public class UserService implements IUserService {
                 .dateOfBirth(userDTO.getDateOfBirth())
                 .facebookAccountId(userDTO.getFacebookAccountId())
                 .googleAccountId(userDTO.getGoogleAccountId())
+                .isActive(true)
                 .build();
         newUser.setRole(role);
         if (userDTO.getFacebookAccountId() == 0 && userDTO.getGoogleAccountId() == 0) {
@@ -78,10 +79,28 @@ public class UserService implements IUserService {
         if (role.isEmpty() || !roleId.equals(existingUser.getRole().getId())) {
             throw new DataNotFoundException(localizationUtils.getLocalizeMessage(MessageKeys.ROLE_DOES_NOT_EXISTS));
         }
+        if(!existingUser.isActive()) {
+            throw new DataNotFoundException(localizationUtils.getLocalizeMessage(MessageKeys.USER_IS_LOCKED));
+        }
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 phoneNumber, password, existingUser.getAuthorities()
         );
         authenticationManager.authenticate(authenticationToken);
         return jwtTokenUtils.generateToken(existingUser);
+    }
+
+    @Override
+    public User getUserDetailsFromToken(String token) throws Exception {
+        if(jwtTokenUtils.isTokenExpired(token)) {
+            throw new Exception("Token is expired");
+        }
+        String phoneNumber = jwtTokenUtils.extractPhoneNumber(token);
+        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
+
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new Exception("User not found");
+        }
     }
 }

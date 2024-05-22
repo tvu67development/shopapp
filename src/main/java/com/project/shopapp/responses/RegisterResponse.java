@@ -1,5 +1,6 @@
 package com.project.shopapp.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.shopapp.models.User;
 import lombok.*;
 
@@ -12,5 +13,6 @@ public class RegisterResponse {
 
     private String message;
 
-    private User user;
+    @JsonProperty("user")
+    private UserResponse userResponse;
 }

@@ -1,24 +1,18 @@
 package com.project.shopapp.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 
-@Entity // thuc the trong JavaSpring
-@Table(name = "orders")  // ten bang trong DB
 @Data //toString()
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Order {
+public class OrderCopyF5 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,9 +62,4 @@ public class Order {
     private String paymentMethod;
 
     private boolean active;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-//    @JsonProperty("order_details")
-    private List<OrderDetail> orderDetails;
 }

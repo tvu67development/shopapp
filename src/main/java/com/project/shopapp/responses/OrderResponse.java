@@ -1,6 +1,8 @@
 package com.project.shopapp.responses;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.shopapp.models.OrderDetail;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -9,6 +11,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -61,4 +64,8 @@ public class OrderResponse {
     private String trackingNumber;
 
     private String active;
+
+//    @JsonManagedReference
+    @JsonProperty("order_details")
+    private List<OrderDetail> orderDetails;
 }

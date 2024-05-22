@@ -52,6 +52,11 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public List<Product> findProductsByIds(List<Long> productIds) {
+        return productRepository.findProductsByIds(productIds);
+    }
+
+    @Override
     public Page<ProductResponse> getAllProducts(String keyword, Long categoryId, PageRequest pageRequest) {
         Page<Product> productPage = productRepository.searchProducts(categoryId, keyword, pageRequest);
         return productPage.map(ProductResponse::fromProduct);

@@ -2,9 +2,11 @@ package com.project.shopapp.controllers;
 
 import com.project.shopapp.dtos.UserDTO;
 import com.project.shopapp.dtos.UserLoginDTO;
+import com.project.shopapp.models.Role;
 import com.project.shopapp.models.User;
 import com.project.shopapp.responses.LoginResponse;
 import com.project.shopapp.responses.RegisterResponse;
+import com.project.shopapp.responses.UserResponse;
 import com.project.shopapp.services.IUserService;
 import com.project.shopapp.components.LocalizationUtils;
 import com.project.shopapp.utils.MessageKeys;
@@ -40,7 +42,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                         RegisterResponse.builder()
                                 .message(errorMessages.toString())
-                                .user(new User())
+                                .userResponse(new UserResponse())
                                 .build()
                 );
             }
@@ -48,7 +50,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                         RegisterResponse.builder()
                                 .message(localizationUtils.getLocalizeMessage(MessageKeys.PASSWORD_NOT_MATCH))
-                                .user(new User())
+                                .userResponse(new UserResponse())
                                 .build()
                 );
             }
@@ -56,14 +58,14 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(
                     RegisterResponse.builder()
                             .message(localizationUtils.getLocalizeMessage(MessageKeys.REGISTER_SUCCESSFULLY))
-                            .user(user)
+                            .userResponse(UserResponse.fromUser(user))
                             .build()
             );
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     RegisterResponse.builder()
                             .message(e.getMessage())
-                            .user(new User())
+                            .userResponse(new UserResponse())
                             .build()
             );
         }
@@ -74,7 +76,9 @@ public class UserController {
                                                BindingResult result) {
         try {
             String token = iUserService.login(
-                    userLoginDTO.getPhoneNumber(), userLoginDTO.getPassword(), userLoginDTO.getRoleId());
+                    userLoginDTO.getPhoneNumber(),
+                    userLoginDTO.getPassword(),
+                    userLoginDTO.getRoleId() == null ? 1 : userLoginDTO.getRoleId());
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     LoginResponse.builder()
@@ -90,4 +94,16 @@ public class UserController {
             );
         }
     }
+
+    @PostMapping("/details")
+    public ResponseEntity<UserResponse> getUserDetails(@RequestHeader("Authorization") String token) {
+        try {
+            String extractedToken = token.substring(7); // Loại bỏ "Bearer " từ chuỗi token
+            User user = iUserService.getUserDetailsFromToken(extractedToken);
+            return ResponseEntity.ok(UserResponse.fromUser(user));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

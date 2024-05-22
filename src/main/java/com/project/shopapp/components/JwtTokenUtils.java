@@ -29,6 +29,7 @@ public class JwtTokenUtils {
         Map<String, Object> claims = new HashMap<>();
         //this.generateSecretKey();
         claims.put("phoneNumber", user.getPhoneNumber());
+        claims.put("userId", user.getId());
         try {
             String token = Jwts.builder()
                     .setClaims(claims) //how to extract claims from this ?
@@ -72,6 +73,9 @@ public class JwtTokenUtils {
         return expirationDate.before(new Date());
     }
     public String extractPhoneNumber(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+    public String extractUserId(String token) {
         return extractClaim(token, Claims::getSubject);
     }
     public boolean validateToken(String token, UserDetails userDetails) {
