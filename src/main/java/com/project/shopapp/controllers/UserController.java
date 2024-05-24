@@ -44,7 +44,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                         RegisterResponse.builder()
                                 .message(errorMessages.toString())
-                                .userResponse(new UserResponse())
+                                .userResponse(null)
                                 .build()
                 );
             }
@@ -52,7 +52,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                         RegisterResponse.builder()
                                 .message(localizationUtils.getLocalizeMessage(MessageKeys.PASSWORD_NOT_MATCH))
-                                .userResponse(new UserResponse())
+                                .userResponse(null)
                                 .build()
                 );
             }
@@ -67,7 +67,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     RegisterResponse.builder()
                             .message(e.getMessage())
-                            .userResponse(new UserResponse())
+                            .userResponse(null)
                             .build()
             );
         }
