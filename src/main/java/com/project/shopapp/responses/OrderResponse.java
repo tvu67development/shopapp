@@ -2,6 +2,7 @@ package com.project.shopapp.responses;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.shopapp.models.Order;
 import com.project.shopapp.models.OrderDetail;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -68,4 +69,25 @@ public class OrderResponse {
 //    @JsonManagedReference
     @JsonProperty("order_details")
     private List<OrderDetail> orderDetails;
+
+    public static OrderResponse fromOrder(Order order) {
+        return OrderResponse
+                .builder()
+                .id(order.getId())
+                .userId(order.getId())
+                .fullName(order.getFullName())
+                .phoneNumber(order.getPhoneNumber())
+                .email(order.getEmail())
+                .address(order.getAddress())
+                .note(order.getNote())
+                .orderDate(order.getOrderDate())
+                .status(order.getStatus())
+                .totalMoney(order.getTotalMoney())
+                .shippingMethod(order.getShippingMethod())
+                .shippingAddress(order.getShippingAddress())
+                .shippingDate(order.getShippingDate())
+                .paymentMethod(order.getPaymentMethod())
+                .orderDetails(order.getOrderDetails())
+                .build();
+    }
 }

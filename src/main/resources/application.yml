@@ -29,7 +29,7 @@ spring:
     default-locale: en
 #    cache-duration: 3600 # in seconds
 api:
-  prefix: api/v1
+  prefix: /api/v1
 jwt:
   expiration: 2592000 # 30 days
   secretKey: "rDJmnZfA8XFp/hftdVJq5ZSnjGQhpak/NEKzF2JwaUQ="

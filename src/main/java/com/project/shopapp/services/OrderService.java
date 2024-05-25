@@ -11,6 +11,8 @@ import com.project.shopapp.repositories.UserRepository;
 import com.project.shopapp.responses.OrderResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -127,4 +129,10 @@ public class OrderService implements IOrderService {
         );
         return orderResponseList;
     }
+
+    @Override
+    public Page<OrderResponse> getOrdersByKeyword(String keyword, Pageable pageable) {
+        return orderRepository.findByKeyword(keyword, pageable).map(OrderResponse::fromOrder);
+    }
+
 }
