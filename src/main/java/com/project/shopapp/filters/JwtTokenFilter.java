@@ -3,7 +3,6 @@ package com.project.shopapp.filters;
 import com.project.shopapp.components.JwtTokenUtils;
 import com.project.shopapp.models.User;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -26,14 +25,14 @@ import java.util.List;
 
 public class JwtTokenFilter extends OncePerRequestFilter{
     @Value("${api.prefix}")
-    private String apiPrefix;
+    private final String apiPrefix;
     private final UserDetailsService userDetailsService;
     private final JwtTokenUtils jwtTokenUtil;
     @Override
     protected void doFilterInternal(@NonNull  HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain)
-            throws ServletException, IOException {
+            throws IOException {
         try {
             if(isBypassToken(request)) {
                 filterChain.doFilter(request, response); //enable bypass
