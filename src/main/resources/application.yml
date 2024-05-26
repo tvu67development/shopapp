@@ -34,3 +34,13 @@ jwt:
   expiration: 2592000 # 30 days
   secretKey: "rDJmnZfA8XFp/hftdVJq5ZSnjGQhpak/NEKzF2JwaUQ="
 
+#logging.level.org.springframework.security : DEBUG
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.project.shopapp: INFO
+    org.hibernate: WARN
+
+
+
