@@ -79,6 +79,7 @@ public class OrderService implements IOrderService {
         }
         // Lưu danh sách OrderDetail vào cơ sở dữ liệu
         orderDetailRepository.saveAll(orderDetails);
+        order.setOrderDetails(orderDetails);
         return modelMapper.map(order, OrderResponse.class);
     }
 

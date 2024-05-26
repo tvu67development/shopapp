@@ -64,7 +64,7 @@ public class OrderResponse {
     @JsonProperty("tracking_number")
     private String trackingNumber;
 
-    private String active;
+    private boolean active;
 
 //    @JsonManagedReference
     @JsonProperty("order_details")
@@ -88,6 +88,7 @@ public class OrderResponse {
                 .shippingDate(order.getShippingDate())
                 .paymentMethod(order.getPaymentMethod())
                 .orderDetails(order.getOrderDetails())
+                .active(order.isActive())
                 .build();
     }
 }

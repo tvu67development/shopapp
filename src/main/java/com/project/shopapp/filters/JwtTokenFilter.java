@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,12 +23,16 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-
 public class JwtTokenFilter extends OncePerRequestFilter{
+
+    @Setter
     @Value("${api.prefix}")
-    private final String apiPrefix;
+    private String apiPrefix;
+
     private final UserDetailsService userDetailsService;
+
     private final JwtTokenUtils jwtTokenUtil;
+
     @Override
     protected void doFilterInternal(@NonNull  HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
@@ -65,6 +70,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         }
 
     }
+
     private boolean isBypassToken(@NonNull  HttpServletRequest request) {
 
         final List<Pair<String, String>> bypassTokens = Arrays.asList(
@@ -91,4 +97,5 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         }
         return false;
     }
+
 }

@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -17,13 +18,17 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.function.Function;
 
+@Setter
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtils {
+
     @Value("${jwt.expiration}")
     private int expiration; //save to an environment variable
+
     @Value("${jwt.secretKey}")
     private String secretKey;
+
     public String generateToken(com.project.shopapp.models.User user) throws Exception{
         //properties => claims
         Map<String, Object> claims = new HashMap<>();
