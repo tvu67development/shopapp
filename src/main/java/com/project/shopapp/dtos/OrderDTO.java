@@ -33,6 +33,8 @@ public class OrderDTO {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    private String status;
+
     private String address;
 
     private String note;

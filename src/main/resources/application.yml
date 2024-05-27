@@ -2,9 +2,9 @@ server:
   port: 8088
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/shopapp?useSSL=false&serverTimezone=UTC  # URL của cơ sở dữ liệu
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/ShopApp?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}  # URL của cơ sở dữ liệu
     username: root                        # Tên đăng nhập vào cơ sở dữ liệu
-    password:                         # Mật khẩu đăng nhập vào cơ sở dữ liệu
+    password: ${MYSQL_ROOT_PASSWORD:}     # Mật khẩu đăng nhập vào cơ sở dữ liệu
     driver-class-name: com.mysql.cj.jdbc.Driver    # Tên lớp driver của MySQL (tùy thuộc vào cơ sở dữ liệu bạn sử dụng)
 #    initialization-mode: always                    # Chế độ khởi tạo cơ sở dữ liệu (always để tự động chạy các tệp schema.sql và data.sql)
 #    hikari:
